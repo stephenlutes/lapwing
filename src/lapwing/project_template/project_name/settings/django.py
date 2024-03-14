@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 
 from pathlib import Path
 
+from decouple import Csv, config
+from dj_database_url import parse as db_url
+
 # Build paths inside the project like this: BASE_DIR / "{path}"
 PROJECT_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = PROJECT_DIR.parent
@@ -21,13 +24,13 @@ BASE_DIR = PROJECT_DIR.parent
 # See https://docs.djangoproject.com/en/{{ docs_version }}/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", default=False, cast=bool)
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "{{ secret_key }}"
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: define the correct hosts in production!
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 
 # Application definition
 
@@ -97,7 +100,7 @@ LOGGING = {
         "file": {
             "level": "INFO",
             "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": BASE_DIR / "lapwing.log",
+            "filename": config("LOG_FILE_PATH"),
             "when": "D",
             "utc": True,
         },
@@ -118,12 +121,7 @@ LOGGING = {
 # Database
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+DATABASES = {"default": config("DATABASE_URL", cast=db_url)}
 
 
 # Password validation
@@ -166,10 +164,10 @@ STATICFILES_FINDERS = [
 
 STATICFILES_DIRS = [PROJECT_DIR / "static"]
 
-STATIC_ROOT = BASE_DIR / "static"
+STATIC_ROOT = Path(config("STATIC_ROOT_BASE")) / "static"
 STATIC_URL = "/static/"
 
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = Path(config("MEDIA_ROOT_BASE")) / "media"
 MEDIA_URL = "/media/"
 
 # Default storage settings, with the staticfiles storage updated.

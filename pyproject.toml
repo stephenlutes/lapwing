@@ -25,6 +25,8 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
+  "dj-database-url",
+  "python-decouple",
   "wagtail",
 ]
 
