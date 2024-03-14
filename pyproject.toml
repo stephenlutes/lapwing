@@ -24,12 +24,17 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = []
+dependencies = [
+  "wagtail",
+]
 
 [project.urls]
 Documentation = "https://github.com/stephenlutes/lapwing#readme"
 Issues = "https://github.com/stephenlutes/lapwing/issues"
 Source = "https://github.com/stephenlutes/lapwing"
+
+[project.scripts]
+lapwing = "lapwing.cmd:run"
 
 [tool.hatch.version]
 path = "src/lapwing/__about__.py"
